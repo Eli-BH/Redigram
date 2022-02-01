@@ -20,4 +20,6 @@ const switchNavigator = createSwitchNavigator({
   }),
 });
 
-export default createAppContainer(switchNavigator);
+const App = createAppContainer(switchNavigator);
+
+export default <App />;
