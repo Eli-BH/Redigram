@@ -1,6 +1,7 @@
 import { createSwitchNavigator, createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { setNavigator } from "./src/navigationRef";
 
 import React from "react";
 import LoginScreen from "./src/Screens/LoginScreen";
@@ -28,6 +29,10 @@ const App = createAppContainer(switchNavigator);
 
 export default (
   <Provider store={store}>
-    <App />
+    <App
+      ref={(navigator) => {
+        setNavigator(navigator);
+      }}
+    />
   </Provider>
 );

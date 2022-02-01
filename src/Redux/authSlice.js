@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { navigate } from "../navigationRef";
 import axios from "axios";
 
 const initialState = {
@@ -46,6 +47,7 @@ export const register = (userData) => async (dispatch) => {
     );
 
     dispatch(signInSuccess(data.token));
+    navigate("mainFlow");
   } catch (error) {
     dispatch(signInFailure());
   }
@@ -58,6 +60,7 @@ export const login = (userData) => async (dispatch) => {
       "http://192.168.1.181:4000/api/auth/login",
       userData
     );
+    navigate("mainFlow");
 
     dispatch(signInSuccess(data.token));
   } catch (error) {
