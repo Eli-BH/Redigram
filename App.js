@@ -8,6 +8,10 @@ import RegisterScreen from "./src/Screens/RegisterScreen";
 import HomeScreen from "./src/Screens/HomeScreen";
 import SettingsScreen from "./src/Screens/SettingsScreen";
 
+//Redux store
+import { Provider } from "react-redux";
+import { store } from "./src/Redux";
+
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     Login: LoginScreen,
@@ -22,4 +26,8 @@ const switchNavigator = createSwitchNavigator({
 
 const App = createAppContainer(switchNavigator);
 
-export default <App />;
+export default (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
