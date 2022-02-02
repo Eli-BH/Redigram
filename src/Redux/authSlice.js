@@ -76,3 +76,17 @@ export function login(userData) {
     }
   };
 }
+
+export function tryLocalLogin() {
+  return async (dispatch) => {
+    const token = await AsyncStorage.getItem("token");
+
+    if (token) {
+      dispatch(signInSuccess(token));
+
+      navigate("mainFlow");
+    } else {
+      navigate("Login");
+    }
+  };
+}
