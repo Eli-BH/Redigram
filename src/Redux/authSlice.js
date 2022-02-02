@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { navigate } from "../navigationRef";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   token: null,
@@ -17,12 +18,11 @@ const authSlice = createSlice({
     },
     signInSuccess: (state, { payload }) => {
       state.loading = false;
-      state.token = JSON.stringify(payload.token);
-      localStorage.setItem("token", payload.tokens);
+      state.token = payload;
     },
     signInFailure: (state, { payload }) => {
       state.loading = false;
-      state.error = payloads;
+      console.log(payload);
     },
   },
 });
@@ -38,32 +38,41 @@ export default authSlice.reducer;
 
 //thunks
 
-export const register = (userData) => async (dispatch) => {
-  dispatch(signIn());
-  try {
-    const { data } = await axios.post(
-      "http://192.168.1.181:4000/api/auth/register",
-      userData
-    );
+export function register(userData) {
+  return async (dispatch) => {
+    dispatch(signIn());
+    try {
+      const { data } = await axios.post(
+        "http://192.168.1.6:4000/api/auth/register",
+        userData
+      );
 
-    dispatch(signInSuccess(data.token));
-    navigate("mainFlow");
-  } catch (error) {
-    dispatch(signInFailure());
-  }
-};
+      dispatch(signInSuccess(data.token));
+      await AsyncStorage.setItem("token", data.token);
+      navigate("mainFlow");
+    } catch (error) {
+      console.log(error);
+      dispatch(signInFailure(error));
+    }
+  };
+}
 
-export const login = (userData) => async (dispatch) => {
-  dispatch(signIn());
-  try {
-    const { data } = await axios.post(
-      "http://192.168.1.181:4000/api/auth/login",
-      userData
-    );
-    navigate("mainFlow");
+export function login(userData) {
+  return async (dispatch) => {
+    console.log(userData);
+    dispatch(signIn());
 
-    dispatch(signInSuccess(data.token));
-  } catch (error) {
-    dispatch(signInFailure());
-  }
-};
+    try {
+      console.log(userData);
+      const { data } = await axios.post(
+        "http://192.168.1.6:4000/api/auth/login",
+        userData
+      );
+      await AsyncStorage.setItem("token", data.token);
+      dispatch(signInSuccess(data.token));
+      navigate("mainFlow");
+    } catch (error) {
+      dispatch(signInFailure(error));
+    }
+  };
+}
