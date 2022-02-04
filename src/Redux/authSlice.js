@@ -22,6 +22,7 @@ const authSlice = createSlice({
     },
     signInFailure: (state, { payload }) => {
       state.loading = false;
+      state.error = payload;
       console.log(payload);
     },
   },
